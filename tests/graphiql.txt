@@ -1,0 +1,38 @@
+mutation createListM1{
+  createList(listInput: {
+    title: "List1",
+    author: "Bob Saget",
+    creationDate: "2020-06-05T06:39:17.247Z",
+    size: 3
+  }) {
+    title
+    creationDate
+    description
+  }
+}
+
+mutation createListM2{
+  createList(listInput: {
+    title: "List2",
+    author: "Casey Stewart",
+    description: "Sketch deadlines"
+    creationDate: "2020-06-05T06:47:22.007Z",
+    size: 12
+  }) {
+    title
+    creationDate
+    description
+  }
+}
+
+
+query getListsQ {
+	lists {
+    _id
+    title
+    author
+    creationDate
+    description
+    size
+  }
+}
