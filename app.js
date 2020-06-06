@@ -5,8 +5,11 @@ const bodyParser = require('body-parser');
 const egql = require('express-graphql');
 const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
+const { handle } = require('./errorMaster');
 const { List, Task } = require('./models/list');
+const User = require('./models/user')
 
 const app = express();
 
@@ -60,6 +63,21 @@ app.use('/api', egql({
       author: String!
     }
 
+    type User {
+      _id: ID!
+      userName: String!
+      password: String
+      email: String!
+      creationDate: String
+      lists: [List!]
+    }
+
+    input UserInput {
+      userName: String!
+      password: String!
+      email: String!
+    }
+
     type RootQuery {
       lists: [List!]!
     }
@@ -67,6 +85,7 @@ app.use('/api', egql({
     type RootMutation {
       createList(listInput: ListInput): List
       createTask(taskInput: TaskInput): Task
+      createUser(userInput: UserInput): User
     }
 
     schema {
@@ -127,6 +146,31 @@ app.use('/api', egql({
       owningList.tasks.push(newTask);
 
       return newTask;
+    },
+    createUser: (args) => {
+
+      const userArgs = args.userInput;
+      return bcrypt.hash(userArgs.password, 12)
+        .then(hashedPass => {
+
+          const newUser = new User({
+
+            userName: userArgs.userName,
+            password: hashedPass,
+            email: userArgs.email,
+            creationDate: new Date(),
+            lists: []
+          });
+
+          return newUser.save();
+        })
+        .then(result => {
+          return { ...result._doc, password: null }
+        })
+        .catch(err => {
+          console.log(err);
+          throw handle(err);
+      });
     }
   },  
   graphiql: true

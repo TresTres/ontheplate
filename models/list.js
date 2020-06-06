@@ -18,7 +18,8 @@ const TaskSchema = new Schema({
   },
   author: {
     
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   creationDate: {
@@ -53,7 +54,8 @@ const ListSchema = new Schema({
   },
   author: {
 
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   creationDate: {

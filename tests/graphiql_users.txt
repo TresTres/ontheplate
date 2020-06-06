@@ -1,0 +1,22 @@
+mutation createUser1 {
+  createUser(userInput: {email: "test@whate.ver", password: "tester", userName: "otherUser"}) {
+  	email
+    userName
+    password
+    lists {
+      title
+    }
+    creationDate
+  }
+}
+mutation createUser2 {
+  createUser(userInput: {email: "test@who.ver", password: "tester", userName: "testUser1"}) {
+  	email
+    userName
+    password
+    lists {
+      title
+    }
+    creationDate
+  }
+}
