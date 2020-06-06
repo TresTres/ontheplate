@@ -1,9 +1,7 @@
 mutation createListM1{
   createList(listInput: {
     title: "List1",
-    author: "Bob Saget",
-    creationDate: "2020-06-05T06:39:17.247Z",
-    size: 3
+    author: "Bob Saget"
   }) {
     title
     creationDate
@@ -16,8 +14,6 @@ mutation createListM2{
     title: "List2",
     author: "Casey Stewart",
     description: "Sketch deadlines"
-    creationDate: "2020-06-05T06:47:22.007Z",
-    size: 12
   }) {
     title
     creationDate
@@ -33,6 +29,50 @@ query getListsQ {
     author
     creationDate
     description
-    size
+    percentDone
+  }
+}
+
+mutation createTask1 {
+  createTask(taskInput: {
+    title: "Task1",
+    author: "Ron Swanson",
+    taskState: NOT_STARTED,
+    listID: "1"
+  }) {
+    title
+    creationDate
+    description
+  }
+}
+
+mutation createTask2 {
+  createTask(taskInput: {
+    title: "Task2",
+    author: "Bing Crosby",
+    taskState: FINISHED,
+    listID: "1"
+  }) {
+    title
+    creationDate
+    description
+  }
+}
+
+query getListsWithTasksQ {
+	lists {
+    _id
+    title
+    author
+    creationDate
+    description
+    tasks {
+      _id
+      title
+      author
+      creationDate
+      taskState 
+    }
+    percentDone
   }
 }
