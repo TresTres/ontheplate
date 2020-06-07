@@ -71,9 +71,12 @@ const ListSchema = new Schema({
   },
   tasks: {
 
-    type: [Schema.Types.ObjectId],
-    ref: 'Task',
-    required: true
+    type: [{
+
+      type: Schema.Types.ObjectId,
+      ref: 'Task',
+    }],
+    required: false
   },
   percentDone: {
 
