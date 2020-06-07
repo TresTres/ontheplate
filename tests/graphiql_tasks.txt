@@ -60,15 +60,67 @@ mutation createList1 {
 }
 
 mutation createListDupNameOtherAuthor {
-  createList(listInput: {title: "list1", author: "5edc10100bd2f52e64a869bc"}) {
+  createList(listInput: {title: "list1", author: "5edc163f5a97942fe0022382"}) {
     title
     description
     author
     creationDate
     tasks {
-      title
+      _id
     }
     percentDone
+  }
+}
+
+mutation createTask1 {
+  createTask(taskInput: {
+    title: "task1",
+    author: "5edc10650bd2f52e64a869c2",
+    owningList: "5edc8681a5ffd23035186c79",
+    description: "first task",
+    taskState: FINISHED
+  }) {
+    title
+    description
+    author
+    owningList 
+    creationDate
+    taskState
+  }
+}
+
+
+mutation createTask2 {
+  createTask(taskInput: {
+    title: "task2",
+    author: "5edc10650bd2f52e64a869c2",
+    owningList: "5edc8681a5ffd23035186c79",
+    description: "second task",
+    taskState: FINISHED
+  }) {
+    title
+    description
+    author
+    owningList 
+    creationDate
+    taskState
+  }
+}
+
+mutation createTask3 {
+  createTask(taskInput: {
+    title: "task3",
+    author: "5edc10650bd2f52e64a869c2",
+    owningList: "5edc8681a5ffd23035186c79",
+    description: "third task",
+    taskState: NOT_STARTED
+  }) {
+    title
+    description
+    author
+    owningList 
+    creationDate
+    taskState
   }
 }
 

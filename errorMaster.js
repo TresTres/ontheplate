@@ -15,6 +15,9 @@ const handle = (err) => {
 
       return new Error(`Entered ${Object.keys(err.keyValue)[0]} already exists`);
     }
+  } else {
+    
+    return err;
   }
 }
 

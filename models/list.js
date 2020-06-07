@@ -16,15 +16,21 @@ const TaskSchema = new Schema({
     type: String,
     required: false
   },
+  creationDate: {
+    
+    type: Date,
+    required: true
+  },
   author: {
     
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  creationDate: {
+  owningList: {
     
-    type: Date,
+    type: Schema.Types.ObjectId,
+    ref: 'List',
     required: true
   },
   taskState: {
@@ -65,7 +71,8 @@ const ListSchema = new Schema({
   },
   tasks: {
 
-    type: [TaskSchema],
+    type: [Schema.Types.ObjectId],
+    ref: 'Task',
     required: true
   },
   percentDone: {
