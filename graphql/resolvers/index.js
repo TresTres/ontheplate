@@ -22,8 +22,12 @@ async function createUser(args) {
       creationDate: new Date(),
       lists: []
     });
-    const result = await newUser.save();
-    return { ...result._doc, password: null }
+    const userResult = await newUser.save();
+    return { 
+      ...userResult._doc, 
+      password: null,
+      creationDate: userResult._doc.creationDate.toISOString()
+    }
   }
   catch (err) {
     console.log(err);
@@ -59,7 +63,10 @@ async function createList(args) {
     ]);
     findUserResult.lists.push(newList._id);
     await findUserResult.save();
-    return { ...listResult._doc };
+    return { 
+      ...listResult._doc,
+      creationDate: listResult._doc.creationDate.toISOString()
+    };
   }
   catch (err) {
     console.log(err);
@@ -108,7 +115,10 @@ async function createTask(args) {
     })
     findListResult.percentDone = 100 * (numCompTasks / owningListTasks.length);
     await findListResult.save();
-    return { ...taskResult._doc };
+    return { 
+      ...taskResult._doc,
+      creationDate: taskResult._doc.creationDate.toISOString()
+    };
   } 
   catch(err) {
     console.log(err);
@@ -121,7 +131,10 @@ module.exports = {
     return List.find().populate('author tasks')
       .then(lists => {
         return lists.map(list => {
-          return { ...list._doc };
+          return { 
+            ...list._doc, 
+            creationDate: list._doc.creationDate.toISOString()
+          };
         });
       })
       .catch(err => {
@@ -133,7 +146,10 @@ module.exports = {
     return User.find().populate('lists')
       .then(users => {
         return users.map(user => {
-          return { ...user._doc };
+          return { 
+            ...user._doc,
+            creationDate: user._doc.creationDate.toISOString()
+          };
         });
       });
   },
