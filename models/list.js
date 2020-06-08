@@ -3,6 +3,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const TaskStates =  [
+  'NOT_STARTED',
+  'IN_PROGRESS',
+  'ABANDONED',
+  'FINISHED'
+];
+
 
 const TaskSchema = new Schema({
 
@@ -37,13 +44,7 @@ const TaskSchema = new Schema({
 
     type: String,
     required: true,
-    enum: [
-      'NOT_STARTED',
-      'IN_PROGRESS',
-      'ABANDONED',
-      'FINISHED'
-    ]
-  }
+    enum: TaskStates }
 });
 
 const ListSchema = new Schema({
