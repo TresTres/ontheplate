@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
+import { BrowserRouter, Route } from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <h1>
-        Test
-      </h1>
-    </div>
-  );
+
+class App extends Component {
+  
+  render() {
+    return (
+      <BrowserRouter>
+        <Route path="/" component={null} />
+        <Route path="/auth" component={null} />
+        <Route path="/lists" component={null} />
+        <Route path="/search" component={null} />
+      </BrowserRouter>
+    );
+  }
+  
 }
 
 export default App;
