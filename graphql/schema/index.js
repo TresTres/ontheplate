@@ -60,10 +60,63 @@ module.exports = buildSchema(`
     email: String!
   }
 
+  type AuthData {
+    userID: ID!
+    token: String!
+    tokenExpiration: Int!
+  }
+
+  enum Conjunction {
+    AND
+    OR
+  }
+
+  type Filter {
+    _id: ID!
+    title: String!
+    author: User!
+    conjunction: Conjunction
+    groups: [FilterGroup!]!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type FilterGroup {
+    _id: ID!
+    conjunction: Conjunction
+    conditions: [FilterCondition!]!
+  }
+
+  enum Operator {
+    EQUAL,
+    NOT_EQUAL,
+    SMALLER_THAN,
+    SMALLER_THAN_OR_EQUAL,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL,
+    IN,
+    NOT_IN,
+    LIKE,
+    NOT_LIKE,
+    BETWEEN,
+    NOT_BETWEEN,
+    IS_NULL,
+    IS_NOT_NULL
+  }
+
+  type FilterCondition {
+    _id: ID!
+    operator: Operator!
+    field: String!
+    value: [String!]!
+  }
+
   type RootQuery {
     lists: [List!]!
     users: [User!]!
-  }
+    filters: [Filter!]!
+    login(email: String!, password: String!): AuthData!
+}
 
   type RootMutation {
     createList(listInput: ListInput): List
