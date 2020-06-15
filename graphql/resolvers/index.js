@@ -204,6 +204,30 @@ async function list(listID) {
   }
 }
 
+
+
+
+async function getAllLists() {
+
+  try {
+
+    const lists = await List.find();
+    return lists.map(list => {      
+      return { 
+        ...list._doc, 
+        creationDate: list._doc.creationDate.toISOString(),
+        author: user.bind(this, list._doc.author),
+        tasks: tasks.bind(this, list._doc.tasks)
+      };
+    });
+  }
+  catch(err) {
+    
+    console.log(err);
+    throw handle(err);
+  }
+}
+
 async function lists(listIDs) {
   
   try {
@@ -249,22 +273,10 @@ async function tasks(taskIDs) {
 
 module.exports = { 
   lists:() => {
-    return List.find()
-      .then(lists => {
-        return lists.map(list => {
-          return { 
-            ...list._doc, 
-            creationDate: list._doc.creationDate.toISOString(),
-            author: user.bind(this, list._doc.author),
-            tasks: tasks.bind(this, lists._doc.tasks)
-          };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        throw err;
-      });
+    return getAllLists();
   },
+
+
   users:() => {
     return User.find()
       .then(users => {
