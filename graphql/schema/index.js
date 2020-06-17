@@ -2,130 +2,67 @@
 
 const { buildSchema } = require('graphql');
 
-module.exports = buildSchema(`
+const { 
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLInputObjectType
+} = require('graphql');
 
-  enum TaskState {
-    NOT_STARTED
-    IN_PROGRESS
-    ABANDONED
-    FINISHED
+
+
+const TaskStateEnum = new GraphQLEnumType({
+
+  name: 'TaskState',
+  values: {
+    
+    NOT_STARTED: { value: 0 },
+    IN_PROGRESS: { value: 1 },
+    ABANDONED: { value: 2 },
+    FINISHED: { value: 3 }
   }
+});
 
-  type Task {
-    _id: ID!
-    title: String!
-    description: String
-    author: User!
-    owningList: List!
-    creationDate: String!
-    taskState: TaskState!
+const TaskType = new GraphQLObjectType({
+  
+  name: 'Task',
+  fields: {
+
+    _id: { type: new GraphQLNonNull(GraphQLID) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: GraphQLString },
+    author: { type: new GraphQLNonNull(UserType) },
+    owningList: { type: new GraphQLNonNull(ListType) },
+    creationDate: { type: new GraphQLNonNull(GraphQLString) },
+    taskState: { type: new GraphQLNonNull(TaskStateEnum) }
   }
+});
 
-  input TaskInput {
-    title: String!
-    description: String
-    author: String!
-    taskState: TaskState!
-    owningList: String!
+const TaskInput = new GraphQLObjectType({
+
+  name: 'TaskInput',
+  fields: {
+
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    description: type { type: GraphQLString },
+    author: { type: new GraphQLNonNull(UserType) },
+    taskState: { type: new GraphQLNonNull(TaskStateEnum) },
+    owningList: { type: new GraphQLNonNull(GraphQLString) }
   }
+});
 
-  type List {
-    _id: ID!
-    title: String!
-    description: String
-    author: User!
-    creationDate: String
-    tasks: [Task!]
-    percentDone: Float
+const ListType = new GraphQLObjectType({
+
+  name: 'List',
+  fields: {
+
+    _id: { type: GraphQLNonNull(GraphQLID) },
+    title: { type: GraphQLNonNull(GrapqhQLString) },
+
   }
+})
 
-  input ListInput {
-    title: String!
-    description: String
-    author: String!
-  }
 
-  type User {
-    _id: ID!
-    userName: String!
-    password: String
-    email: String!
-    creationDate: String
-    lists: [List!]
-  }
-
-  input UserInput {
-    userName: String!
-    password: String!
-    email: String!
-  }
-
-  type AuthData {
-    userID: ID!
-    token: String!
-    tokenExpiration: Int!
-  }
-
-  enum Conjunction {
-    AND
-    OR
-  }
-
-  type Filter {
-    _id: ID!
-    title: String!
-    author: User!
-    conjunction: Conjunction
-    groups: [FilterGroup!]!
-    createdAt: String!
-    updatedAt: String!
-  }
-
-  type FilterGroup {
-    _id: ID!
-    conjunction: Conjunction
-    conditions: [FilterCondition!]!
-  }
-
-  enum Operator {
-    EQUAL,
-    NOT_EQUAL,
-    SMALLER_THAN,
-    SMALLER_THAN_OR_EQUAL,
-    GREATER_THAN,
-    GREATER_THAN_OR_EQUAL,
-    IN,
-    NOT_IN,
-    LIKE,
-    NOT_LIKE,
-    BETWEEN,
-    NOT_BETWEEN,
-    IS_NULL,
-    IS_NOT_NULL
-  }
-
-  type FilterCondition {
-    _id: ID!
-    operator: Operator!
-    field: String!
-    value: [String!]!
-  }
-
-  type RootQuery {
-    lists: [List!]!
-    users: [User!]!
-    filters: [Filter!]!
-    login(email: String!, password: String!): AuthData!
-}
-
-  type RootMutation {
-    createList(listInput: ListInput): List
-    createTask(taskInput: TaskInput): Task
-    createUser(userInput: UserInput): User
-  }
-
-  schema {
-    query: RootQuery
-    mutation: RootMutation
-  }
-`);

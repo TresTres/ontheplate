@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const egql = require('express-graphql');
 const mongoose = require('mongoose');
 
-
 const OTPSchema = require('./graphql/schema');
 const OTPResolvers = require('./graphql/resolvers');
 
