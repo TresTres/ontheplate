@@ -9,6 +9,9 @@ const { List, Task }  = require('../../models/list');
 const User = require('../../models/user');
 const { Filter, FilterGroup, FilterCondition } = require('../../models/filter');
 
+
+
+
 async function createUser(args) {
 
   const userArgs = args.userInput;
@@ -16,7 +19,6 @@ async function createUser(args) {
     
     const hashedPass = await bcrypt.hash(userArgs.password, 12);
     const newUser = new User({
-    
     
       userName: userArgs.userName,
       password: hashedPass,
@@ -70,7 +72,7 @@ async function createList(args) {
     return { 
       ...listResult._doc,
       creationDate: listResult._doc.creationDate.toISOString(),
-      author: user.bind(this, listResult._doc.author)
+      author: getUser.bind(this, listResult._doc.author)
     };
   }
   catch (err) {
@@ -125,8 +127,8 @@ async function createTask(args) {
     return { 
       ...taskResult._doc,
       creationDate: taskResult._doc.creationDate.toISOString(),
-      author: user.bind(this, taskResult._doc.author),
-      owningList: list.bind(this, taskResult._doc.owningList)
+      author: getUser.bind(this, taskResult._doc.author),
+      owningList: getList.bind(this, taskResult._doc.owningList)
     };
   } 
   catch(err) {
@@ -165,7 +167,7 @@ async function login({ email, password }) {
   }
 }
 
-async function user(userID) {
+async function getUser(userID) {
   
   try {
     
@@ -174,7 +176,7 @@ async function user(userID) {
       ...user._doc, 
       password: null,
       creationDate: user._doc.creationDate.toISOString(),
-      lists: lists.bind(this, user._doc.lists)
+      lists: getLists.bind(this, user._doc.lists)
     };
   } 
   catch(err) {
@@ -184,8 +186,27 @@ async function user(userID) {
   }
 }
 
+async function getUsersAll() {
 
-async function list(listID) {
+  try {
+
+    const users = await User.find();
+    return users.map(user => {
+      return { 
+        ...user._doc,
+        creationDate: user._doc.creationDate.toISOString(),
+        lists: getLists.bind(this, user._doc.lists)
+      };
+    });
+  }
+  catch(err) {
+
+    console.log(err);
+    throw handle(err);
+  }
+}
+
+async function getList(listID) {
   
   try {
     
@@ -193,8 +214,8 @@ async function list(listID) {
     return { 
       ...list._doc,
       creationDate: list._doc.creationDate.toISOString(),
-      author: user.bind(this, list._doc.author),
-      tasks: tasks.bind(this, list._doc.tasks)
+      author: getUser.bind(this, list._doc.author),
+      tasks: getTasks.bind(this, list._doc.tasks)
     };
   }
   catch(err) {
@@ -207,7 +228,7 @@ async function list(listID) {
 
 
 
-async function getAllLists() {
+async function getListsAll() {
 
   try {
 
@@ -216,8 +237,8 @@ async function getAllLists() {
       return { 
         ...list._doc, 
         creationDate: list._doc.creationDate.toISOString(),
-        author: user.bind(this, list._doc.author),
-        tasks: tasks.bind(this, list._doc.tasks)
+        author: getUser.bind(this, list._doc.author),
+        tasks: getTasks.bind(this, list._doc.tasks)
       };
     });
   }
@@ -228,7 +249,7 @@ async function getAllLists() {
   }
 }
 
-async function lists(listIDs) {
+async function getLists(listIDs) {
   
   try {
     
@@ -237,8 +258,8 @@ async function lists(listIDs) {
       return { 
         ...list._doc,
         creationDate: list._doc.creationDate.toISOString(),
-        author: user.bind(this, list._doc.author),
-        tasks: tasks.bind(this, list._doc.tasks)
+        author: getUser.bind(this, list._doc.author),
+        tasks: getTasks.bind(this, list._doc.tasks)
       };
     });
   }
@@ -249,7 +270,7 @@ async function lists(listIDs) {
   }
 }
 
-async function tasks(taskIDs) {
+async function getTasks(taskIDs) {
 
   try {
     
@@ -258,8 +279,8 @@ async function tasks(taskIDs) {
       return { 
         ...task._doc,
         creationDate: task._doc.creationDate.toISOString(),
-        author: user.bind(this, task._doc.author),
-        owningList: list.bind(this, task._doc.owningList)
+        author: getUser.bind(this, task._doc.author),
+        owningList: getList.bind(this, task._doc.owningList)
       };
     });
   }
@@ -273,21 +294,10 @@ async function tasks(taskIDs) {
 
 module.exports = { 
   lists:() => {
-    return getAllLists();
+    return getListsAll();
   },
-
-
   users:() => {
-    return User.find()
-      .then(users => {
-        return users.map(user => {
-          return { 
-            ...user._doc,
-            creationDate: user._doc.creationDate.toISOString(),
-            lists: lists.bind(this, user._doc.lists)
-          };
-        });
-      });
+    return getUsersAll();
   },
   createList: (args) => {
     return createList(args);
