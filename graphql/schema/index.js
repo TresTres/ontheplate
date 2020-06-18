@@ -1,68 +1,174 @@
 //schema/index.js
 
-const { buildSchema } = require('graphql');
-
 const { 
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLInputObjectType
+	GraphQLObjectType,
+	GraphQLID,
+	GraphQLInt,
+	GraphQLFloat,
+	GraphQLString,
+	GraphQLSchema,
+	GraphQLList,
+	GraphQLNonNull,
 } = require('graphql');
 
 
+const { TaskStateEnum } = require('./enums');
+const { 
+	TaskInput,
+	ListInput,
+	UserInput
+} = require('./inputs');
 
-const TaskStateEnum = new GraphQLEnumType({
 
-  name: 'TaskState',
-  values: {
-    
-    NOT_STARTED: { value: 0 },
-    IN_PROGRESS: { value: 1 },
-    ABANDONED: { value: 2 },
-    FINISHED: { value: 3 }
-  }
-});
+const UserType = new GraphQLObjectType({
 
-const TaskType = new GraphQLObjectType({
-  
-  name: 'Task',
-  fields: {
-
-    _id: { type: new GraphQLNonNull(GraphQLID) },
-    title: { type: new GraphQLNonNull(GraphQLString) },
-    description: { type: GraphQLString },
-    author: { type: new GraphQLNonNull(UserType) },
-    owningList: { type: new GraphQLNonNull(ListType) },
-    creationDate: { type: new GraphQLNonNull(GraphQLString) },
-    taskState: { type: new GraphQLNonNull(TaskStateEnum) }
-  }
-});
-
-const TaskInput = new GraphQLObjectType({
-
-  name: 'TaskInput',
-  fields: {
-
-    title: { type: new GraphQLNonNull(GraphQLString) },
-    description: type { type: GraphQLString },
-    author: { type: new GraphQLNonNull(UserType) },
-    taskState: { type: new GraphQLNonNull(TaskStateEnum) },
-    owningList: { type: new GraphQLNonNull(GraphQLString) }
-  }
+	name: 'User',
+	fields: () => ({
+		_id: { type: new GraphQLNonNull(GraphQLID) },
+		userName: { type: new GraphQLNonNull(GraphQLString) },
+		password: { type: GraphQLString },
+		email: { type: new GraphQLNonNull(GraphQLString) },
+		creationDate: {type: new GraphQLNonNull(GraphQLString) },
+		lists: { type: new GraphQLNonNull(
+			new GraphQLList(
+				new GraphQLNonNull(
+					ListType
+				)
+			)
+		)}
+	})
 });
 
 const ListType = new GraphQLObjectType({
 
-  name: 'List',
-  fields: {
+	name: 'List',
+	fields: () => ({
 
-    _id: { type: GraphQLNonNull(GraphQLID) },
-    title: { type: GraphQLNonNull(GrapqhQLString) },
+		_id: { type: new GraphQLNonNull(GraphQLID) },
+		title: { type: new GraphQLNonNull(GraphQLString) },
+		description: { type: GraphQLString },
+		author: { type: new GraphQLNonNull(UserType) },
+		creationDate: { type: new GraphQLNonNull(GraphQLString) },
+		tasks: { type: new GraphQLNonNull(
+			new GraphQLList(
+				new GraphQLNonNull(
+					TaskType
+				)
+			)
+		)},
+		percentDone: { type: GraphQLFloat }
+	})
+});
 
-  }
-})
+const TaskType = new GraphQLObjectType({
+  
+	name: 'Task',
+	fields: () => {
+		
+		const taskFields = {
+			_id: { type: new GraphQLNonNull(GraphQLID) },
+			title: { type: new GraphQLNonNull(GraphQLString) },
+			description: { type: GraphQLString },
+			author: { type: new GraphQLNonNull(UserType) },
+			owningList: { type: new GraphQLNonNull(ListType) },
+			creationDate: { type: new GraphQLNonNull(GraphQLString) },
+			taskState: { type: new GraphQLNonNull(TaskStateEnum) }
+		};
+
+		return taskFields;
+	}
+});
+
+const AuthDataType = new GraphQLObjectType({
+
+	name: 'AuthData',
+	fields: {
+		
+		userID: { type: new GraphQLNonNull(GraphQLID) },
+		token: { type: new GraphQLNonNull(GraphQLString) },
+		tokenExpiration: { type: new GraphQLNonNull(GraphQLInt) }
+	}
+});
+
+const RootQueryType = new GraphQLObjectType({
+
+	name: 'RootQuery',
+	fields: {
+
+		lists: { type: new GraphQLNonNull(
+			new GraphQLList(
+				new GraphQLNonNull(
+					ListType
+				)
+			)
+		)},
+		users: { type: new GraphQLNonNull(
+			new GraphQLList(
+				new GraphQLNonNull(
+					UserType
+				)
+			)
+		)},
+		login: {
+			
+			type: new GraphQLNonNull(AuthDataType),
+			args: {
+				
+				email: { type: new GraphQLNonNull(GraphQLString) },
+				password: { type: new GraphQLNonNull(GraphQLString) },
+			}
+		}
+	}
+});
 
 
+const RootMutationType = new GraphQLObjectType({
+
+	name: 'RootMutation',
+	fields: {
+
+		createTask: {
+			
+			type: TaskType,
+			args: {
+
+				taskInput: {
+					
+					name: 'taskInput',
+					type: new GraphQLNonNull(TaskInput)
+				}
+			}
+		},
+		createList: {
+			
+			type: ListType,
+			args: {
+				
+				listInput: {
+
+					name: 'listInput',
+					type: new GraphQLNonNull(ListInput)
+				}
+			}
+		},
+		createUser: {
+			
+			type: UserType,
+			args: {
+				
+				userInput: {
+
+					name: 'userInput',
+					type: new GraphQLNonNull(UserInput)
+				}
+			}
+		}
+	}
+});
+
+
+module.exports = new GraphQLSchema({
+
+	query: RootQueryType,
+	mutation: RootMutationType
+});

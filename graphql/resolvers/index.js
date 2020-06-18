@@ -6,8 +6,8 @@ const listResolver = require('./lists');
 
 const rootResolver = {
 
-  ...userResolver,
-  ...listResolver
+	...userResolver,
+	...listResolver
 };
 
 module.exports = rootResolver;
