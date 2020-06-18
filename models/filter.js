@@ -30,7 +30,7 @@ const Operators = [
 const FilterSchema = new Schema({
   
   title: {
-    
+
     type: String, 
     required: true
   },
@@ -77,7 +77,7 @@ const FilterGroupSchema = new Schema({
   }
 });
 
-const ConditionSchema = new Schema({
+const FilterConditionSchema = new Schema({
 
   operator: {
     
@@ -105,7 +105,7 @@ const ConditionSchema = new Schema({
 module.exports = {
   
   Filter: mongoose.model('Filter', FilterSchema),
-  FilterGroup: mongoose.model('FilterGroup', FilterGroup),
-  FilterCondition: mongoosel.model('FilterCondition', FilterCondition)
+  FilterGroup: mongoose.model('FilterGroup', FilterGroupSchema),
+  FilterCondition: mongoose.model('FilterCondition', FilterConditionSchema)
 };
   
