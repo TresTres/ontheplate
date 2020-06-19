@@ -4,86 +4,86 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TaskStates =  [
-  'NOT_STARTED',
-  'IN_PROGRESS',
-  'ABANDONED',
-  'FINISHED'
+	'NOT_STARTED',
+	'IN_PROGRESS',
+	'ABANDONED',
+	'FINISHED'
 ];
 
 
 const TaskSchema = new Schema({
 
-  title: {
+	title: {
 
-    type: String,
-    required: true
-  },
-  description: {
+		type: String,
+		required: true
+	},
+	description: {
 
-    type: String,
-    required: false
-  },
-  creationDate: {
+		type: String,
+		required: false
+	},
+	creationDate: {
     
-    type: Date,
-    required: true
-  },
-  author: {
+		type: Date,
+		required: true
+	},
+	author: {
     
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  owningList: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: true
+	},
+	owningList: {
     
-    type: Schema.Types.ObjectId,
-    ref: 'List',
-    required: true
-  },
-  taskState: {
+		type: Schema.Types.ObjectId,
+		ref: 'List',
+		required: true
+	},
+	taskState: {
 
-    type: String,
-    required: true,
-    enum: TaskStates }
+		type: String,
+		required: true,
+		enum: TaskStates }
 });
 
 const ListSchema = new Schema({
 
-  title: {  
+	title: {  
     
-    type: String,
-    required: true
-  },
-  description: {
+		type: String,
+		required: true
+	},
+	description: {
     
-    type: String,
-    required: false
-  },
-  author: {
+		type: String,
+		required: false
+	},
+	author: {
 
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  creationDate: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: true
+	},
+	creationDate: {
 
-    type: Date,
-    required: true
-  },
-  tasks: {
+		type: Date,
+		required: true
+	},
+	tasks: {
 
-    type: [{
+		type: [{
 
-      type: Schema.Types.ObjectId,
-      ref: 'Task',
-    }],
-    required: false
-  },
-  percentDone: {
+			type: Schema.Types.ObjectId,
+			ref: 'Task',
+		}],
+		required: false
+	},
+	percentDone: {
 
-    type: Number,
-    required: false
-  }
+		type: Number,
+		required: false
+	}
 
 });
 
@@ -91,6 +91,6 @@ const ListSchema = new Schema({
 
 module.exports = {
   
-  List: mongoose.model('List', ListSchema),
-  Task: mongoose.model('Task', TaskSchema)
+	List: mongoose.model('List', ListSchema),
+	Task: mongoose.model('Task', TaskSchema)
 };
