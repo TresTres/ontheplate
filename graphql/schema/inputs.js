@@ -25,8 +25,7 @@ const ListInput = new GraphQLInputObjectType({
 	fields: {
     
 		title: { type: new GraphQLNonNull(GraphQLString) },
-		description: { type: GraphQLString },
-		author: { type: new GraphQLNonNull(GraphQLString) }
+		description: { type: GraphQLString }
 	}
 });
 
@@ -37,7 +36,6 @@ const TaskInput = new GraphQLInputObjectType({
 
 		title: { type: new GraphQLNonNull(GraphQLString) },
 		description: { type: GraphQLString },
-		author: { type: new GraphQLNonNull(GraphQLString) },
 		taskState: { type: new GraphQLNonNull(TaskStateEnum) },
 		owningList: { type: new GraphQLNonNull(GraphQLString) }
 	}

@@ -8,13 +8,14 @@ const mongoose = require('mongoose');
 
 const OTPSchema = require('./graphql/schema');
 const OTPResolvers = require('./graphql/resolvers');
+const authcheck = require('./middleware/authcheck');
+
 
 const app = express();
 
 
-
 app.use(bodyParser.json());
-
+app.use(authcheck);
 
 app.use('/api', egql({
 	schema: OTPSchema,

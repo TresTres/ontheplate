@@ -1,18 +1,23 @@
 //resolvers/lists.js
 
 const { handle } = require('../../errorMaster');
-const { User, List, Task }  = require('../../models/list');
+const { List, Task }  = require('../../models/list');
+const User = require('../../models/user');
 
 const { getUser, getList, getTasks } = require('./merge');
 
-async function createList(args) {
+async function createList(args, req) {
 
 	const listArgs = args.listInput;
 	try {
-    
+
+		if(!req.isAuth) {
+			
+			throw new Error('Unauthenticated');
+		}
 		const dupList = await List.findOne({
 			title: listArgs.title,
-			author: listArgs.author
+			author: req.userID
 		});
 		if(dupList) {
 
@@ -22,7 +27,7 @@ async function createList(args) {
         
 			title:  listArgs.title,
 			description:  listArgs.description,
-			author: listArgs.author,
+			author: req.userID,
 			creationDate: new Date(),
 			tasks: [],
 			percentDone: null
@@ -30,7 +35,7 @@ async function createList(args) {
 
 		const [listResult, findUserResult] = await Promise.all([
 			newList.save(),
-			User.findById(newList.author)
+			User.findById(req.userID)
 		]);
 		findUserResult.lists.push(newList._id);
 		await findUserResult.save();
@@ -47,14 +52,18 @@ async function createList(args) {
 	}
 }
 
-async function createTask(args) {
+async function createTask(args, req) {
 
 	try {
-    
+
+		if(!req.isAuth) {
+			
+			throw new Error('Unauthenticated');
+		}
 		const taskArgs = args.taskInput;
 		const dupTask = await Task.findOne({
 			title: taskArgs.title,
-			author: taskArgs.author,
+			author: req.userID,
 			owningList: taskArgs.owningList
 		});
 		if(dupTask) {
@@ -65,7 +74,7 @@ async function createTask(args) {
 
 			title: taskArgs.title,
 			description: taskArgs.description,
-			author: taskArgs.author,
+			author: req.userID,
 			creationDate: new Date(),
 			owningList: taskArgs.owningList,
 			taskState: taskArgs.taskState,
@@ -130,11 +139,11 @@ module.exports = {
 		return getListsAll();
 	},
   
-	createTask: (args) => {
-		return createTask(args);
+	createTask: (args, req) => {
+		return createTask(args, req);
 	},
 
-	createList: (args) => {
-		return createList(args);
+	createList: (args, req) => {
+		return createList(args, req);
 	}
 };

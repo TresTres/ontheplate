@@ -3,22 +3,27 @@
 
 const MongoCodes = {
 
-  DupKey: 11000
-}
+	DupKey: 11000
+};
 
 
 const handle = (err) => {
 
-  if(err.name === 'MongoError') {
+	if(err.name === 'MongoError') {
 
-    if(err.code === MongoCodes.DupKey) {
+		if(err.code === MongoCodes.DupKey) {
 
-      return new Error(`Entered ${Object.keys(err.keyValue)[0]} already exists`);
-    }
-  } else {
+			return new Error(`Entered ${Object.keys(err.keyValue)[0]} already exists`);
+		}
+	} 
+	else if(err.message === 'Unauthenticated') {
+
+		return new Error(`You do not have permission to do that.`);
+	}
+	else {
     
-    return err;
-  }
-}
+		return err;
+	}
+};
 
 module.exports.handle = handle;
