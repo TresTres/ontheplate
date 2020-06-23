@@ -1,3 +1,4 @@
+// Auth.js
 import React, { Component } from 'react';
 
 class AuthPage extends Component {
