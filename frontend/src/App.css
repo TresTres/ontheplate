@@ -1,7 +1,12 @@
 /* App.css */
 
 .main-content {
-	
-	background: red;
+	background-color: #5ec9ff;
+	background-repeat: no-repeat;
+	position: fixed;
+	height: 100%;
 	margin-bottom: 2rem;
+	width: 100%;
 }
+
+
