@@ -12,3 +12,4 @@ The specific thing here is I should be able to process my info in one place, and
 
 ## To Do
 1.  Likely want to get metrics about a list without having to access the list itself, so change the percentDone into some sort of list-metadata to get a number breakdown that's easily usable on the front-end
+2.  Figure out why react-scripts can't be used past version 3.0.0.  Could be a huge headache.  
