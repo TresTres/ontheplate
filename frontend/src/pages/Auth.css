@@ -1,0 +1,16 @@
+/* Auth.css */
+
+.auth-form {
+	width: 30rem;
+	max-width: 70%;
+	margin: 20rem auto;
+}
+
+.form-actions {
+	margin-top: .5rem;
+}
+
+.form-actions button {
+	margin: 1rem;
+}
+
