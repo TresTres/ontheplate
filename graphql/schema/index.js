@@ -85,6 +85,7 @@ const AuthDataType = new GraphQLObjectType({
 	fields: {
 		
 		userID: { type: new GraphQLNonNull(GraphQLID) },
+		userName: { type: new GraphQLNonNull(GraphQLString) },
 		token: { type: new GraphQLNonNull(GraphQLString) },
 		tokenExpiration: { type: new GraphQLNonNull(GraphQLInt) }
 	}
