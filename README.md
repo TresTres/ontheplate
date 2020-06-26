@@ -1,6 +1,6 @@
 # ontheplate
 ## What This Is
-An attempt to keep myself sane using GraphQL, React(?), Express, Nodejs, and MongoDB.  We can call this the MERNG stack...or GERMN...MERINGUE?
+An attempt to keep myself sane using GraphQL, React, Express, Nodejs, and MongoDB.  We can call this the MERNG stack...or GERMN...MERINGUE?
 
 ## Rationale
 One way I've attempted to manage my mess of a life is by maintaining a lot of lists using the Notes app on my phone or on pen and paper.
