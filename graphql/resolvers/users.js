@@ -75,7 +75,7 @@ async function login({ email, password }) {
 			`${process.env.JWT_SECRET}`,
 			{ expiresIn: '1h' }
 		);
-		return { userID: user._id, token: token, tokenExpiration: 1 };
+		return { userID: user._id, userName: user.userName, token: token, tokenExpiration: 1 };
 
 	} 
 	catch(err) {

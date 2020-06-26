@@ -3,7 +3,7 @@
 .auth-form {
 	width: 30rem;
 	max-width: 70%;
-	margin: 20rem auto;
+	margin: 5rem auto;
 }
 
 .form-actions {
@@ -14,3 +14,6 @@
 	margin: 1rem;
 }
 
+.title-header {
+	margin-top: 10rem;
+}

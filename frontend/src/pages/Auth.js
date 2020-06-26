@@ -1,18 +1,21 @@
 // Auth.js
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { 
 	Button,
 	FormControl, 
 	Input, 
-	InputLabel
+	InputLabel,
+	Typography
 } from '@material-ui/core';
 
 import { validateInput } from '../utils/helper';
+import AuthContext from '../context/auth-context';
 import './Auth.css';
 
 class AuthPage extends Component {
 
+	static contextType = AuthContext;
 
 	state = {
 		isLogin: true
@@ -26,11 +29,8 @@ class AuthPage extends Component {
 	}
 
 	switchModeHandler = () => {
-		this.setState(prevState => {
-
-			return {isLogin: !prevState.isLogin};
-		});
-	}
+		this.setState((prevState) => ({ isLogin: !prevState.isLogin }));
+	};
 
 
 	loginHandler = (event) => {
@@ -48,6 +48,9 @@ class AuthPage extends Component {
 				query {
 					login(email: "${email}", password: "${password}") {
 						userID
+						userName
+						token
+						tokenExpiration
 					}
 				}
 			`
@@ -64,10 +67,20 @@ class AuthPage extends Component {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');
 			}
+			
 			return res.json();
 		}).
 		then((resbody) => {
-			console.log(resbody);
+			const resdata = resbody.data;
+			
+			if (resdata.login.token) {
+				this.context.startSession(
+					resdata.login.token, 
+					resdata.login.userID,
+					resdata.login.userName,
+					resdata.login.tokenExpiration
+				);
+			}
 		}).
 		catch((err) => {
 			console.log(err);
@@ -112,6 +125,7 @@ class AuthPage extends Component {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');
 			}
+			
 			return res.json();
 		}).
 		then((resbody) => {
@@ -126,31 +140,52 @@ class AuthPage extends Component {
 	render() {
 
 		return (
-			<form className="auth-form" 
-				onSubmit={this.state.isLogin ? this.loginHandler : this.createUserHandler}>
-				<FormControl required fullWidth={true} className="form-control">
-					<InputLabel htmlFor="email">E-Mail</InputLabel>
-					<Input type="email" id="email-input" inputRef={(ref) => {this.emailEl = ref}}/>
-				</FormControl>
-				{ !this.state.isLogin &&
-					<FormControl required fullWidth={true} className="form-control">
-						<InputLabel htmlFor="userName">User Name</InputLabel>
-						<Input type="username" id="username-input" inputRef={(ref) => {this.userNameEl = ref}}/>
-					</FormControl> }
-				<FormControl required fullWidth={true} className="form-control">
-					<InputLabel htmlFor="password">Password</InputLabel>
-					<Input type="password" id="password-input" inputRef={(ref) => {this.passwordEl = ref}}/>
-				</FormControl>
-				<div className="form-actions">
-					<Button variant="outlined" type="submit" disableElevation>
-						{this.state.isLogin ? 'Log In' : 'Create Account'}
-					</Button>
-					<Button variant="outlined" type="button" onClick={this.switchModeHandler} 
-						disableElevation>
-						{this.state.isLogin ? 'New User' : 'Back to Sign In'}
-					</Button>
+			<Fragment>
+				<div className="title-header">
+					<Typography variant="h1" align="center"
+						className="title-header" gutterBottom>
+						On The Plate
+					</Typography>
 				</div>
-			</form>
+				<form className="auth-form" onSubmit={this.state.isLogin ? 
+							this.loginHandler : this.createUserHandler}>
+					
+					<FormControl required fullWidth={true} 
+								className="form-control">
+						<InputLabel htmlFor="email">E-Mail</InputLabel>
+						<Input type="email" id="email-input" 
+							inputRef={(ref) => { this.emailEl = ref }}/>
+					</FormControl>
+
+					{ !this.state.isLogin &&
+						<FormControl required fullWidth={true} 
+								className="form-control">
+							<InputLabel htmlFor="userName">
+									User Name
+							</InputLabel>
+							<Input type="username" id="username-input" 
+								inputRef={(ref) => { this.userNameEl = ref }}/>
+						</FormControl> }
+
+					<FormControl required fullWidth={true} 
+							className="form-control">
+						<InputLabel htmlFor="password">
+							Password
+						</InputLabel>
+						<Input type="password" id="password-input" 
+							inputRef={(ref) => { this.passwordEl = ref }}/>
+					</FormControl>
+					<div className="form-actions">
+						<Button variant="outlined" type="submit" disableElevation>
+							{this.state.isLogin ? 'Log In' : 'Create Account'}
+						</Button>
+						<Button variant="outlined" type="button" onClick={this.switchModeHandler} 
+							disableElevation>
+							{this.state.isLogin ? 'New User' : 'Back to Sign In'}
+						</Button>
+					</div>
+				</form>
+			</Fragment>
 		);
 	}
 }
