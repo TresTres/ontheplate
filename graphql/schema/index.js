@@ -115,7 +115,7 @@ const RootQueryType = new GraphQLObjectType({
 			type: new GraphQLNonNull(AuthDataType),
 			args: {
 				
-				email: { type: new GraphQLNonNull(GraphQLString) },
+				str: { type: new GraphQLNonNull(GraphQLString) },
 				password: { type: new GraphQLNonNull(GraphQLString) },
 			}
 		}
