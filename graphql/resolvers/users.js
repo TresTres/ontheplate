@@ -56,11 +56,11 @@ async function getUsersAll() {
 	}
 }
 
-async function login({ email, password }) {
+async function login({ str, password }) {
   
 	try {
   
-		const user = await User.findOne({ email: email });
+		const user = await User.findOne({$or: [{email: str}, {userName: str}] });
 		if (!user) {
       
 			throw new Error('User does not exist!');
