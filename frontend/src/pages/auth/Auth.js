@@ -3,10 +3,10 @@
 import React, { Component, Fragment } from 'react';
 import { Typography } from '@material-ui/core';
 
-import { validateInput } from '../utils/helper';
+import { validateInput } from '../../utils/helper';
 import AuthButtons from './AuthButtons';
 import AuthInputs from './AuthInputs';
-import AuthContext from '../context/auth-context';
+import AuthContext from '../../context/auth-context';
 import './Auth.css';
 
 

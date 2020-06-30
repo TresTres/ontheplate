@@ -9,26 +9,25 @@ import './MainNav.css';
 const MainNavigation = (props) => (
 
 	<AuthContext.Consumer>
-		{(context) => {
-			return (
+		{
+			(context) => context.token && (
 				<header className="main-navigation">
 					<div className="main-navigation__logo">
-						<h1>OnThePlate</h1>
+						<h2>OnThePlate</h2>
 					</div>
 					<nav className="main-navigation__items">
-						{
-							context.token &&
+					
 							<ul>
 								<li><NavLink to="/home">Home Base</NavLink></li>
 								<li><NavLink to="/lists">Lists</NavLink></li>
 								<li><NavLink to="/search">Search</NavLink></li>
 								<li><NavLink to="/profile">Profile</NavLink></li>
+								<li><button>Log out</button></li>
 							</ul>
-						}
 					</nav>
 				</header>
-			);
-		}}
+			)
+		}
 	</AuthContext.Consumer>
 );
 
