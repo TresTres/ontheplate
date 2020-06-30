@@ -15,10 +15,12 @@ class AuthButtons extends Component {
 
 		return (
 			<div className="form-actions">
-				<Button variant="outlined" type="submit" disableElevation>
+				<Button label={this.props.isLogin ? "log-in-button" : "create-account-button"} 
+					variant="outlined" type="submit" disableElevation>
 					{this.props.isLogin ? 'Log In' : 'Create Account'}
 				</Button>
-				<Button variant="outlined" type="button" onClick={this.switchModeHandler} 
+				<Button label={this.props.isLogin ? "new-user-mode-button" : "sign-in-mode-button"}
+					variant="outlined" type="button" onClick={this.switchModeHandler} 
 					disableElevation>
 					{this.props.isLogin ? 'New User' : 'Back to Sign In'}
 				</Button>

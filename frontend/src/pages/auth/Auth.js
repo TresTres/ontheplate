@@ -3,7 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import { Typography } from '@material-ui/core';
 
-import { validateInput } from '../../utils/helper';
+import { validateInput, fetchRequest } from '../../utils/helper';
 import AuthButtons from './AuthButtons';
 import AuthInputs from './AuthInputs';
 import AuthContext from '../../context/auth-context';
@@ -54,13 +54,7 @@ class AuthPage extends Component {
 			`
 		};
 
-		fetch('http://localhost:4000/api', {
-			method: 'POST',
-			body: JSON.stringify(requestBody),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).
+		fetchRequest(requestBody).
 		then((res) => {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');
@@ -70,7 +64,7 @@ class AuthPage extends Component {
 		}).
 		then((resbody) => {
 			const resdata = resbody.data;
-			
+			console.table(resdata);
 			if (resdata.login.token) {
 				this.context.startSession(
 					resdata.login.token, 
@@ -83,6 +77,7 @@ class AuthPage extends Component {
 		catch((err) => {
 			console.log(err);
 		});
+		console.log('Completed request');
 	};
 
 	createUserHandler = (event) => {
@@ -110,13 +105,7 @@ class AuthPage extends Component {
 			`
 		};
 		
-		fetch('http://localhost:4000/api', {
-			method: 'POST',
-			body: JSON.stringify(requestBody),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).
+		fetchRequest(requestBody).
 		then((res) => {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');
