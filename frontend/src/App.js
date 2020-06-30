@@ -50,9 +50,8 @@ class App extends Component {
 					}}>
 						<Switch>
 							<main className="main-content">
-								{!this.state.token && <Redirect path="/" to="/auth" exact />}
+								{!this.state.token && <Redirect to="/auth" exact />}
 								{!this.state.token && <Route path="/auth" component={AuthPage} />}
-
 								{this.state.token && <Redirect path="/" to="/home" exact />}
 								{this.state.token && <Redirect path="/auth" to="/home" exact />}
 								{this.state.token &&

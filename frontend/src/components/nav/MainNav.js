@@ -22,7 +22,7 @@ const MainNavigation = (props) => (
 								<li><NavLink to="/lists">Lists</NavLink></li>
 								<li><NavLink to="/search">Search</NavLink></li>
 								<li><NavLink to="/profile">Profile</NavLink></li>
-								<li><button>Log out</button></li>
+								<li><a className="logout" onClick={context.endSession}>Log out</a></li>
 							</ul>
 					</nav>
 				</header>
