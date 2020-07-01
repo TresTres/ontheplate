@@ -5,36 +5,41 @@ import PropTypes from 'prop-types';
 import {
     Modal,
     Fade,
-    Button
+    Button,
+    Typography
 } from '@material-ui/core';
 
+import './SimpleModal.css';
 
 const SimpleModal = (props) => (
 
     <Modal className="modal" open={props.open} onClose={props.onClose}
         closeAfterTransition>
-        <Fragment>
-            <header className="modal__content">{props.title}</header>
-            <section className="modal__content">
+        <div className="modal__paper">
+            <Typography variant="h3" align="center"
+						className="modal__content" gutterBottom>
+						{props.title}
+			</Typography>
+            <div className="modal__content">
                 <Fade in={props.open}>
                     {props.children}
                 </Fade>
-            </section>
-            <section className="modal__actions">
+            </div>
+            <div className="modal__actions">
                 {props.canConfirm && 
-                    <Button onClick={props.onConfirm}
-                    >
+                    <Button variant="contained" 
+                        onClick={props.onConfirm}>
                         {props.confirmText}
                     </Button>
                 }
                 {props.canCancel && 
-                    <Button onClick={props.onClose}
-                    >
+                    <Button variant="contained" 
+                        onClick={props.onClose}>
                         {props.cancelText}
                     </Button>
                 }
-            </section>
-        </Fragment>
+            </div>
+        </div>
     </Modal>
 );
 

@@ -77,7 +77,6 @@ class AuthPage extends Component {
 		catch((err) => {
 			console.log(err);
 		});
-		console.log('Completed request');
 	};
 
 	createUserHandler = (event) => {

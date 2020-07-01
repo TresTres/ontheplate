@@ -11,13 +11,14 @@ const validateInput = (args) => {
 	return args.trim().length > 0;
 };
 
-const fetchRequest = (requestBody) => {
+const fetchRequest = (requestBody, token) => {
 	return fetch('http://localhost:4000/api', {
 		method: 'POST',
 		body: JSON.stringify(requestBody),
 		headers: {
-			'Content-Type': 'application/json'
-		}
+			'Content-Type': 'application/json',
+			...((token??0).length??0 > 0) && {'Authorization': 'Bearer ' + token }
+		}	
 	})
 };
 
