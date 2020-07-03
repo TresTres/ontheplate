@@ -1,22 +1,24 @@
 /* MainNav.css */
 
 .main-navigation {
+
   align-content: center;
 	bottom: 0;
   background: #39373b;
   display: flex;
-  font-size: 2.5rem;
-  height: 5.5rem;
+  font-family: 'Oxygen', sans-serif;
+  height: 4.5rem;
   left: 0;
   padding: 0 1rem;
   position: fixed;
   width: 100%;
 }
 
-.main-navigation__logo h1 {
+.main-navigation__logo h2 {
   color: white;
-  font-size: 2.5rem;
-  margin: 1.5rem;
+	font-size: 2.7rem;
+	letter-spacing: .2rem;
+  margin: .8rem;
 }
 
 .main-navigation__items {
@@ -26,28 +28,39 @@
 .main-navigation__items ul {
   display: flex;
   list-style: none;
-  margin: 0;
-	padding: 0;
+  margin: 1rem 0;
+  padding: 0;
+  align-items: center;
 }
 
 .main-navigation__items li {
-	margin: 1.5rem;
+	font-size: 2rem;
+  letter-spacing: 2px;
+  margin: 0 1rem;
 }
 
 .main-navigation__items a {
-	color: #e3e1de;
-	text-decoration: none;
+  color: #e3e1de;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font: inherit;
+  background: transparent;
+
 }
 
+.main-navigation__items a.logout {
+  margin-left: 20rem;
+}
 
 .main-navigation__items a:hover {
+  border: transparent;
 	color: #a6b0a0;
 }
 
-.main-navigation__items a:active {
-	color: grey;
-}
-
+.main-navigation__items a:active,
 .main-navigation__items a.active {
-	color: #a6b0a0;
+  border: transparent;
+	color:gray;
 }
+

@@ -49,6 +49,7 @@ const ListType = new GraphQLObjectType({
 		description: { type: GraphQLString },
 		author: { type: new GraphQLNonNull(UserType) },
 		creationDate: { type: new GraphQLNonNull(GraphQLString) },
+		dueDate: { type: GraphQLString },
 		tasks: { type: new GraphQLNonNull(
 			new GraphQLList(
 				new GraphQLNonNull(
@@ -115,7 +116,7 @@ const RootQueryType = new GraphQLObjectType({
 			type: new GraphQLNonNull(AuthDataType),
 			args: {
 				
-				email: { type: new GraphQLNonNull(GraphQLString) },
+				str: { type: new GraphQLNonNull(GraphQLString) },
 				password: { type: new GraphQLNonNull(GraphQLString) },
 			}
 		}

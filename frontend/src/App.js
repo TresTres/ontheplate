@@ -5,9 +5,9 @@ import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 
-import AuthPage from './pages/Auth';
+import AuthPage from './pages/auth/Auth';
 import HomePage from './pages/Home';
-import ListsPage from './pages/Lists';
+import ListsPage from './pages/lists/Lists';
 
 import MainNavigation from './components/nav/MainNav';
 import AuthContext from './context/auth-context';
@@ -23,10 +23,10 @@ class App extends Component {
 
 	startSession = (token, userID, userName, tokenExpiration) => {
 		this.setState({
-			token: token,
-			userID: userID,
-			userName: userName
-		})
+			token,
+			userID,
+			userName
+		});
 	};
 
 	endSession = () => {
@@ -50,9 +50,8 @@ class App extends Component {
 					}}>
 						<Switch>
 							<main className="main-content">
-								{!this.state.token && <Redirect path="/" to="/auth" exact />}
+								{!this.state.token && <Redirect to="/auth" exact />}
 								{!this.state.token && <Route path="/auth" component={AuthPage} />}
-
 								{this.state.token && <Redirect path="/" to="/home" exact />}
 								{this.state.token && <Redirect path="/auth" to="/home" exact />}
 								{this.state.token &&
