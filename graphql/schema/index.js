@@ -49,6 +49,7 @@ const ListType = new GraphQLObjectType({
 		description: { type: GraphQLString },
 		author: { type: new GraphQLNonNull(UserType) },
 		creationDate: { type: new GraphQLNonNull(GraphQLString) },
+		dueDate: { type: GraphQLString },
 		tasks: { type: new GraphQLNonNull(
 			new GraphQLList(
 				new GraphQLNonNull(

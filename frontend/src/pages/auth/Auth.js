@@ -64,7 +64,6 @@ class AuthPage extends Component {
 		}).
 		then((resbody) => {
 			const resdata = resbody.data;
-			console.table(resdata);
 			if (resdata.login.token) {
 				this.context.startSession(
 					resdata.login.token, 

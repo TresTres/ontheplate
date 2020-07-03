@@ -1,4 +1,4 @@
-/* SimpleModal.css */
+/* SimpleFormModal.css */
 
 .modal {
 
@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.modal__paper {
+.modal__form {
     width: 50%;
     height: 45%;
     padding: auto;

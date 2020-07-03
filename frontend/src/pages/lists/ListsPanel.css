@@ -1,0 +1,12 @@
+/* ListsPanel.css */
+
+.list-panel__container {
+    max-width: 40%;
+    justify-content: left;
+    margin-left: 0;
+}
+
+.list-panel__item-content {
+    justify-content: center;
+    color: rgb(34, 42, 110);
+}

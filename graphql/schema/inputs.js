@@ -25,7 +25,8 @@ const ListInput = new GraphQLInputObjectType({
 	fields: {
     
 		title: { type: new GraphQLNonNull(GraphQLString) },
-		description: { type: GraphQLString }
+		description: { type: GraphQLString },
+		dueDate: { type: GraphQLString }
 	}
 });
 

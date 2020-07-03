@@ -1,4 +1,4 @@
-// SimpleModal.js
+// SimpleFormModal.js
 
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
@@ -9,13 +9,13 @@ import {
     Typography
 } from '@material-ui/core';
 
-import './SimpleModal.css';
+import './SimpleFormModal.css';
 
-const SimpleModal = (props) => (
+const SimpleFormModal = (props) => (
 
     <Modal className="modal" open={props.open} onClose={props.onClose}
         closeAfterTransition>
-        <div className="modal__paper">
+        <form className="modal__form" onSubmit={props.onConfirm}>
             <Typography variant="h3" align="center"
 						className="modal__content" gutterBottom>
 						{props.title}
@@ -28,7 +28,7 @@ const SimpleModal = (props) => (
             <div className="modal__actions">
                 {props.canConfirm && 
                     <Button variant="contained" 
-                        onClick={props.onConfirm}>
+                        type="submit">
                         {props.confirmText}
                     </Button>
                 }
@@ -39,13 +39,13 @@ const SimpleModal = (props) => (
                     </Button>
                 }
             </div>
-        </div>
+        </form>
     </Modal>
 );
 
-export default SimpleModal;
+export default SimpleFormModal;
 
-SimpleModal.propTypes = {
+SimpleFormModal.propTypes = {
     canCancel: PropTypes.bool, 
     canConfirm: PropTypes.bool,
     cancelText: PropTypes.string,

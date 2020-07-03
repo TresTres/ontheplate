@@ -28,6 +28,10 @@ const TaskSchema = new Schema({
 		type: Date,
 		required: true
 	},
+	dueDate: {
+		type: Date, 
+		required: false
+	},
 	author: {
     
 		type: Schema.Types.ObjectId,
@@ -69,6 +73,10 @@ const ListSchema = new Schema({
 
 		type: Date,
 		required: true
+	},
+	dueDate: {
+		type: Date, 
+		required: false
 	},
 	tasks: {
 

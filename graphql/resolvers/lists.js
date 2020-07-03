@@ -24,15 +24,15 @@ async function createList(args, req) {
 			throw new Error('List with that title already exists.');
 		}
 		const newList = new List({
-        
+
 			title:  listArgs.title,
 			description:  listArgs.description,
 			author: req.userID,
 			creationDate: new Date(),
+			...(listArgs.dueDate) && { dueDate: new Date(listArgs.dueDate) },
 			tasks: [],
 			percentDone: null
 		});
-
 		const [listResult, findUserResult] = await Promise.all([
 			newList.save(),
 			User.findById(req.userID)
@@ -42,6 +42,8 @@ async function createList(args, req) {
 		return { 
 			...listResult._doc,
 			creationDate: listResult._doc.creationDate.toISOString(),
+			dueDate: listResult._doc.dueDate ? listResult._doc.dueDate.toISOString()
+				: '',
 			author: getUser.bind(this, listResult._doc.author)
 		};
 	}
@@ -121,6 +123,8 @@ async function getListsAll() {
 			return { 
 				...list._doc, 
 				creationDate: list._doc.creationDate.toISOString(),
+				dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
+				: '',
 				author: getUser.bind(this, list._doc.author),
 				tasks: getTasks.bind(this, list._doc.tasks)
 			};

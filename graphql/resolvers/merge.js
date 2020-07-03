@@ -34,6 +34,8 @@ const getList = async function(listID) {
 		return { 
 			...list._doc,
 			creationDate: list._doc.creationDate.toISOString(),
+			dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
+			: '',
 			author: getUser.bind(this, list._doc.author),
 			tasks: getTasks.bind(this, list._doc.tasks)
 		};
@@ -54,6 +56,8 @@ const getLists = async function(listIDs) {
 			return { 
 				...list._doc,
 				creationDate: list._doc.creationDate.toISOString(),
+				dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
+				: '',
 				author: getUser.bind(this, list._doc.author),
 				tasks: getTasks.bind(this, list._doc.tasks)
 			};
