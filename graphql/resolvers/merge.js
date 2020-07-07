@@ -7,17 +7,12 @@ const { List, Task } = require('../../models/list');
 
 
 
-const getUser =  async function(userID) {
+const getUser =  async (userID) => {
   
 	try {
     
 		const user = await User.findById(userID);
-		return { 
-			...user._doc, 
-			password: null,
-			creationDate: user._doc.creationDate.toISOString(),
-			lists: getLists.bind(this, user._doc.lists)
-		};
+		return repackUserDoc(user);
 	} 
 	catch(err) {
 
@@ -26,19 +21,12 @@ const getUser =  async function(userID) {
 	}
 };
 
-const getList = async function(listID) {
+const getList = async (listID) => {
   
 	try {
     
 		const list = await List.findById(listID);
-		return { 
-			...list._doc,
-			creationDate: list._doc.creationDate.toISOString(),
-			dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
-			: '',
-			author: getUser.bind(this, list._doc.author),
-			tasks: getTasks.bind(this, list._doc.tasks)
-		};
+		return repackListDoc(list);
 	}
 	catch(err) {
     
@@ -47,21 +35,12 @@ const getList = async function(listID) {
 	}
 };
 
-const getLists = async function(listIDs) {
+const getLists = async (listIDs) => {
   
 	try {
     
 		const lists = await List.find({_id: { $in: listIDs }});
-		return lists.map(list => {  
-			return { 
-				...list._doc,
-				creationDate: list._doc.creationDate.toISOString(),
-				dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
-				: '',
-				author: getUser.bind(this, list._doc.author),
-				tasks: getTasks.bind(this, list._doc.tasks)
-			};
-		});
+		return lists.map(list => repackListDoc(list));
 	}
 	catch(err) {
     
@@ -70,19 +49,12 @@ const getLists = async function(listIDs) {
 	}
 };
 
-const getTasks = async function(taskIDs) {
+const getTasks = async (taskIDs) => {
 
 	try {
     
 		const tasks = await Task.find({_id: { $in: taskIDs }});
-		return tasks.map(task => {  
-			return { 
-				...task._doc,
-				creationDate: task._doc.creationDate.toISOString(),
-				author: getUser.bind(this, task._doc.author),
-				owningList: getList.bind(this, task._doc.owningList)
-			};
-		});
+		return tasks.map(task => repackTaskDoc(task));
 	}
 	catch(err) {
     
@@ -90,11 +62,35 @@ const getTasks = async function(taskIDs) {
 		throw handle(err);
 	}
 };
+
+const repackUserDoc = (user) => ({
+	...user._doc, 
+	password: null,
+	creationDate: user._doc.creationDate.toISOString()
+});
+
+const repackListDoc = (list) => ({
+	...list._doc, 
+	creationDate: list._doc.creationDate.toISOString(),
+	dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString() : '',
+	author: getUser.bind(this, list._doc.author),
+	tasks: getTasks.bind(this, list._doc.tasks)
+});
+
+const repackTaskDoc = (task) => ({
+	...task._doc,
+	creationDate: task._doc.creationDate.toISOString(),
+	author: getUser.bind(this, task._doc.author),
+	owningList: getList.bind(this, task._doc.owningList)
+});
 
 module.exports = {
 	getUser,
 	getList,
 	getLists,
-	getTasks
+	getTasks,
+	repackListDoc,
+	repackTaskDoc,
+	repackUserDoc
 };
 
