@@ -6,9 +6,9 @@ const bcrypt = require('bcryptjs');
 const { handle } = require('../../errorMaster');
 
 const User = require('../../models/user');
-const { getLists } = require('./merge');
+const { repackUserDoc } = require('./merge');
 
-async function createUser(args) {
+const createUser = async (args) => {
 
 	const userArgs = args.userInput;
 	try {
@@ -23,11 +23,7 @@ async function createUser(args) {
 			lists: []
 		});
 		const userResult = await newUser.save();
-		return { 
-			...userResult._doc, 
-			password: null,
-			creationDate: userResult._doc.creationDate.toISOString()
-		};
+		return repackUserDoc(userResult);
 	}
 	catch (err) {
     
@@ -36,18 +32,12 @@ async function createUser(args) {
 	}
 }
 
-async function getUsersAll() {
+const getUsersAll = async () => {
 
 	try {
 
 		const users = await User.find();
-		return users.map(user => {
-			return { 
-				...user._doc,
-				creationDate: user._doc.creationDate.toISOString(),
-				lists: getLists.bind(this, user._doc.lists)
-			};
-		});
+		return users.map(user => repackUserDoc(user));
 	}
 	catch(err) {
 
@@ -56,7 +46,7 @@ async function getUsersAll() {
 	}
 }
 
-async function login({ str, password }) {
+const login = async ({ str, password }) => {
   
 	try {
   
@@ -75,7 +65,11 @@ async function login({ str, password }) {
 			`${process.env.JWT_SECRET}`,
 			{ expiresIn: '1h' }
 		);
-		return { userID: user._id, userName: user.userName, token: token, tokenExpiration: 1 };
+		return { 
+			userID: user._id, 
+			userName: user.userName, 
+			token: token, tokenExpiration: 1 
+		};
 
 	} 
 	catch(err) {

@@ -4,9 +4,9 @@ const { handle } = require('../../errorMaster');
 const { List, Task }  = require('../../models/list');
 const User = require('../../models/user');
 
-const { getUser, getList, getTasks } = require('./merge');
+const { repackListDoc, repackTaskDoc } = require('./merge');
 
-async function createList(args, req) {
+const createList = async (args, req) => {
 
 	const listArgs = args.listInput;
 	try {
@@ -39,13 +39,7 @@ async function createList(args, req) {
 		]);
 		findUserResult.lists.push(newList._id);
 		await findUserResult.save();
-		return { 
-			...listResult._doc,
-			creationDate: listResult._doc.creationDate.toISOString(),
-			dueDate: listResult._doc.dueDate ? listResult._doc.dueDate.toISOString()
-				: '',
-			author: getUser.bind(this, listResult._doc.author)
-		};
+		return repackListDoc(listResult);
 	}
 	catch (err) {
     
@@ -54,7 +48,7 @@ async function createList(args, req) {
 	}
 }
 
-async function createTask(args, req) {
+const createTask = async (args, req) => {
 
 	try {
 
@@ -100,12 +94,7 @@ async function createTask(args, req) {
 		});
 		findListResult.percentDone = 100 * (numCompTasks / owningListTasks.length);
 		await findListResult.save();
-		return { 
-			...taskResult._doc,
-			creationDate: taskResult._doc.creationDate.toISOString(),
-			author: getUser.bind(this, taskResult._doc.author),
-			owningList: getList.bind(this, taskResult._doc.owningList)
-		};
+		return repackTaskDoc(taskResult);
 	} 
 	catch(err) {
     
@@ -114,21 +103,12 @@ async function createTask(args, req) {
 	}
 }
 
-async function getListsAll() {
+const getListsAll = async () => {
 
 	try {
 
 		const lists = await List.find();
-		return lists.map(list => {      
-			return { 
-				...list._doc, 
-				creationDate: list._doc.creationDate.toISOString(),
-				dueDate: list._doc.dueDate ? list._doc.dueDate.toISOString()
-				: '',
-				author: getUser.bind(this, list._doc.author),
-				tasks: getTasks.bind(this, list._doc.tasks)
-			};
-		});
+		return lists.map((list) => repackListDoc(list));
 	}
 	catch(err) {
     
@@ -136,6 +116,7 @@ async function getListsAll() {
 		throw handle(err);
 	}
 }
+
 
 module.exports = {
 
