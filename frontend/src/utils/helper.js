@@ -12,7 +12,7 @@ const validateInput = (args) => {
 };
 
 const fetchRequest = (requestBody, token) => {
-	return fetch('http://localhost:4000/api', {
+	return fetch('/api', {
 		method: 'POST',
 		body: JSON.stringify(requestBody),
 		headers: {
