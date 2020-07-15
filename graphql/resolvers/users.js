@@ -66,13 +66,16 @@ const login = async ({ str, password }, res) => {
 		);
 		res.cookie("id", token, {
 			httpOnly: true,
+			sameSite: true,
 			maxAge: 1000 * 60 * 60 // one hour
 		});
+		//todo: cookie should be secure when this is hosted.  
 
 		return { 
 			userID: user._id, 
 			userName: user.userName, 
-			token: token, tokenExpiration: 1 
+			token: token, 
+			tokenExpiration: 1 
 		};
 
 	} 
@@ -82,6 +85,10 @@ const login = async ({ str, password }, res) => {
 		throw handle(err);
 	}
 }
+
+const resumeID = async (userID) => (
+	await User.findById(userID) ? userID : ''
+);
 
 module.exports = {
 
@@ -95,5 +102,9 @@ module.exports = {
 
 	login: (args, { res }) => {
 		return login(args, res);
+	},
+
+	resumeID: (_, { userID }) => {
+		return resumeID(userID)
 	}
 };

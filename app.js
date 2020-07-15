@@ -21,17 +21,19 @@ const app = express();
 const server = https.createServer({key : key, cert: cert}, app);
 app.use(bodyParser.json());
 app.use(cookieParser(), 
-(req, _, next) => {
-	try {
-		const { userID } = jwt.verify(req.cookies.id, process.env.JWT_SECRET);
-		req.userID = userID;
-	} catch (err) {
-		console.log(err);
-	}
-	return next();
+	async (req, _, next) => {
+		try {
+			if(req.cookies.id) {
+				const { userID } = jwt.verify(req.cookies.id, process.env.JWT_SECRET);
+				req.userID = userID;
+			}
+		} catch (err) {
+			console.log(err);
+		}
+		return next();
 });
 app.use('/api',
-	graphqlHTTP((req,res) => ({
+	graphqlHTTP((req, res) => ({
 		schema: OTPSchema,
 		rootValue: OTPResolvers,  
 		graphiql: true,

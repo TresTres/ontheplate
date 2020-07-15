@@ -21,6 +21,32 @@ class AuthPage extends Component {
 		userName: '',
 		password: ''
 	};
+	
+	componentDidMount() {
+		const requestBody = {
+			query: `
+				query {
+					resumeID
+				}
+			`
+		};
+		fetchRequest(requestBody).
+		then((res) => {
+			if (res.status !== 200 && res.status !== 201) {
+				throw new Error('Failed');
+			}
+			return res.json();
+		}).
+		then((resbody) => {
+			const resdata = resbody.data;
+			if (resdata.resumeID) {
+				this.context.authenticate(resdata.resumeID);
+			}
+		}).
+		catch((err) => {
+			console.log(err);
+		});
+	}
 
 	switchModeHandler = () => {
 		this.setState((prevState) => ({ isLogin: !prevState.isLogin }));
@@ -59,18 +85,12 @@ class AuthPage extends Component {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');
 			}
-			
 			return res.json();
 		}).
 		then((resbody) => {
 			const resdata = resbody.data;
-			if (resdata.login.token) {
-				this.context.startSession(
-					resdata.login.token, 
-					resdata.login.userID,
-					resdata.login.userName,
-					resdata.login.tokenExpiration
-				);
+			if (resdata.login.userID) {
+				this.context.authenticate(resdata.login.userID);
 			}
 		}).
 		catch((err) => {
