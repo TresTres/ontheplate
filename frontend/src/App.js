@@ -15,25 +15,18 @@ import AuthContext from './context/auth-context';
 class App extends Component {
 
 	state = {
-
-		token: null,
-		userID: null,
-		userName: null
+		userID: ''
 	};
 
-	startSession = (token, userID, userName, tokenExpiration) => {
+	authenticate = (userID) => {
 		this.setState({
-			token,
-			userID,
-			userName
+			userID: userID
 		});
 	};
 
-	endSession = () => {
+	signout = () => {
 		this.setState({
-			token: null,
-			userID: null,
-			userName: null
+			userID: ''
 		})
 	};
 
@@ -42,19 +35,17 @@ class App extends Component {
 			<BrowserRouter>
 				<Fragment>
 					<AuthContext.Provider value={{
-						token: this.state.token,
-						userID: this.state.userName,
-						userName: this.state.userName,
-						startSession: this.startSession,
-						endSession: this.endSession
+						userID: this.state.userID,
+						authenticate: this.authenticate,
+						signout: this.signout
 					}}>
 						<Switch>
 							<main className="main-content">
-								{!this.state.token && <Redirect to="/auth" exact />}
-								{!this.state.token && <Route path="/auth" component={AuthPage} />}
-								{this.state.token && <Redirect path="/" to="/home" exact />}
-								{this.state.token && <Redirect path="/auth" to="/home" exact />}
-								{this.state.token &&
+								{!this.state.userID && <Redirect to="/auth" exact />}
+								{!this.state.userID && <Route path="/auth" component={AuthPage} />}
+								{this.state.userID && <Redirect path="/" to="/home" exact />}
+								{this.state.userID && <Redirect path="/auth" to="/home" exact />}
+								{this.state.userID &&
 									<Fragment>
 										<Route path="/home" component={HomePage} />
 										<Route path="/lists" component={ListsPage} />

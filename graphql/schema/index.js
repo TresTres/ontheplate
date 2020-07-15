@@ -8,7 +8,7 @@ const {
 	GraphQLString,
 	GraphQLSchema,
 	GraphQLList,
-	GraphQLNonNull,
+	GraphQLNonNull
 } = require('graphql');
 
 
@@ -97,20 +97,20 @@ const RootQueryType = new GraphQLObjectType({
 	name: 'RootQuery',
 	fields: {
 
-		lists: { type: new GraphQLNonNull(
+		lists: { 
+			type: new GraphQLNonNull(
 			new GraphQLList(
-				new GraphQLNonNull(
-					ListType
+				new GraphQLNonNull(ListType)
 				)
 			)
-		)},
-		users: { type: new GraphQLNonNull(
-			new GraphQLList(
-				new GraphQLNonNull(
-					UserType
+		},
+		users: { 
+			type: new GraphQLNonNull(
+				new GraphQLList(
+					new GraphQLNonNull(UserType)
 				)
 			)
-		)},
+		},
 		login: {
 			
 			type: new GraphQLNonNull(AuthDataType),
@@ -119,7 +119,8 @@ const RootQueryType = new GraphQLObjectType({
 				str: { type: new GraphQLNonNull(GraphQLString) },
 				password: { type: new GraphQLNonNull(GraphQLString) },
 			}
-		}
+		},
+		resumeID: { type: new GraphQLNonNull(GraphQLString) }
 	}
 });
 

@@ -10,7 +10,7 @@ const MainNavigation = (props) => (
 
 	<AuthContext.Consumer>
 		{
-			(context) => context.token && (
+			(context) => context.userID && (
 				<header className="main-navigation">
 					<div className="main-navigation__logo">
 						<h2>OnThePlate</h2>
@@ -22,7 +22,7 @@ const MainNavigation = (props) => (
 								<li><NavLink to="/lists">Lists</NavLink></li>
 								<li><NavLink to="/search">Search</NavLink></li>
 								<li><NavLink to="/profile">Profile</NavLink></li>
-								<li><a className="logout" onClick={context.endSession}>Log out</a></li>
+								<li><a className="logout" onClick={context.signout}>Log out</a></li>
 							</ul>
 					</nav>
 				</header>
