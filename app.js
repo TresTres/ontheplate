@@ -4,43 +4,40 @@ const fs = require('fs');
 const express = require('express');
 const https = require('https');
 const bodyParser = require('body-parser');
-const egql = require('express-graphql');
+const graphqlHTTP = require('express-graphql');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose'); 
+const jwt = require('jsonwebtoken');
 
 
 const OTPSchema = require('./graphql/schema');
 const OTPResolvers = require('./graphql/resolvers');
-const authcheck = require('./middleware/authcheck');
-
 
 const key = fs.readFileSync('./server.key');
 const cert = fs.readFileSync('./server.cert');
 
+
 const app = express();
 const server = https.createServer({key : key, cert: cert}, app);
-
 app.use(bodyParser.json());
-
-app.use((req, res, next) => {
-	
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-
-	if(req.method === 'OPTIONS') {
-		return res.sendStatus(200);
+app.use(cookieParser(), 
+(req, _, next) => {
+	try {
+		const { userID } = jwt.verify(req.cookies.id, process.env.JWT_SECRET);
+		req.userID = userID;
+	} catch (err) {
+		console.log(err);
 	}
-	next();
+	return next();
 });
-
-app.use(authcheck);
-
-app.use('/api', egql({
-	schema: OTPSchema,
-	rootValue: OTPResolvers,  
-	graphiql: true
-}));
-
+app.use('/api',
+	graphqlHTTP((req,res) => ({
+		schema: OTPSchema,
+		rootValue: OTPResolvers,  
+		graphiql: true,
+		context: { res, userID: req.userID }
+	}))
+);
 
 mongoose.connect(
 	`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@otp-cluster-syomc.gcp.mongodb.net/` +
