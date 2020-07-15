@@ -46,10 +46,9 @@ const getUsersAll = async () => {
 	}
 }
 
-const login = async ({ str, password }) => {
+const login = async ({ str, password }, res) => {
   
 	try {
-  
 		const user = await User.findOne({$or: [{email: str}, {userName: str}] });
 		if (!user) {
       
@@ -65,6 +64,11 @@ const login = async ({ str, password }) => {
 			`${process.env.JWT_SECRET}`,
 			{ expiresIn: '1h' }
 		);
+		res.cookie("id", token, {
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 // one hour
+		});
+
 		return { 
 			userID: user._id, 
 			userName: user.userName, 
@@ -89,7 +93,7 @@ module.exports = {
 		return createUser(args);
 	},
 
-	login: (args) => {
-		return login(args);
+	login: (args, { res }) => {
+		return login(args, res);
 	}
 };
