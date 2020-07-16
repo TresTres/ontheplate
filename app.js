@@ -40,6 +40,15 @@ app.use('/api',
 		context: { res, userID: req.userID }
 	}))
 );
+app.use('/signout',
+	async (_, res, next) => {
+		try {
+			res.clearCookie("id")
+		} catch (err) {
+			console.log(err)
+		}
+		return next();
+});
 
 mongoose.connect(
 	`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@otp-cluster-syomc.gcp.mongodb.net/` +

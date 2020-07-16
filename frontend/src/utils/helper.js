@@ -11,16 +11,17 @@ const validateInput = (args) => {
 	return args.trim().length > 0;
 };
 
-const fetchRequest = (requestBody, token) => {
+const fetchRequest = (requestBody) => {
 	return fetch('/api', {
 		method: 'POST',
 		body: JSON.stringify(requestBody),
 		headers: {
-			'Content-Type': 'application/json',
-			...((token??0).length??0 > 0) && {'Authorization': 'Bearer ' + token }
+			'Content-Type': 'application/json'
 		}	
 	})
 };
+
+const signoutRequest = (token) => {}
 
 exports.validateInput = validateInput;
 exports.fetchRequest = fetchRequest;

@@ -10,14 +10,11 @@ import {
 } from '@material-ui/core';
 import NewListIcon from '@material-ui/icons/PlaylistAdd';
 
-import AuthContext from '../../context/auth-context';
 import { fetchRequest, validateInput } from '../../utils/helper'; 
 import SimpleFormModal from '../../components/modal/SimpleFormModal';
 import './ListsPanel.css'
 
 class ListsPanel extends Component {
-
-	static contextType = AuthContext;
 
 	state = {
 		showNewListModal: false,
@@ -73,9 +70,8 @@ class ListsPanel extends Component {
 				}
 			`
 		};		
-		const token = this.context.token;
 
-		fetchRequest(requestBody, token).
+		fetchRequest(requestBody).
 		then((res) => {
 			if (res.status !== 200 && res.status !== 201) {
 				throw new Error('Failed');

@@ -22,31 +22,6 @@ class AuthPage extends Component {
 		password: ''
 	};
 	
-	componentDidMount() {
-		const requestBody = {
-			query: `
-				query {
-					resumeID
-				}
-			`
-		};
-		fetchRequest(requestBody).
-		then((res) => {
-			if (res.status !== 200 && res.status !== 201) {
-				throw new Error('Failed');
-			}
-			return res.json();
-		}).
-		then((resbody) => {
-			const resdata = resbody.data;
-			if (resdata.resumeID) {
-				this.context.authenticate(resdata.resumeID);
-			}
-		}).
-		catch((err) => {
-			console.log(err);
-		});
-	}
 
 	switchModeHandler = () => {
 		this.setState((prevState) => ({ isLogin: !prevState.isLogin }));
@@ -73,8 +48,6 @@ class AuthPage extends Component {
 					login(str: "${loginStr}", password: "${password}") {
 						userID
 						userName
-						token
-						tokenExpiration
 					}
 				}
 			`
