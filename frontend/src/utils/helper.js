@@ -18,10 +18,15 @@ const fetchRequest = (requestBody) => {
 		headers: {
 			'Content-Type': 'application/json'
 		}	
-	})
+	});
 };
 
-const signoutRequest = (token) => {}
+const signoutRequest = () => {
+	return fetch('/signout', {
+		method: 'POST'
+	});
+};
 
 exports.validateInput = validateInput;
 exports.fetchRequest = fetchRequest;
+exports.signoutRequest = signoutRequest;

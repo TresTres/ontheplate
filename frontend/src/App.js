@@ -12,7 +12,7 @@ import ListsPage from './pages/lists/Lists';
 
 import MainNavigation from './components/nav/MainNav';
 import AuthContext from './context/auth-context';
-import { fetchRequest } from './utils/helper';
+import { fetchRequest, signoutRequest } from './utils/helper';
 
 class App extends Component {
 
@@ -59,38 +59,41 @@ class App extends Component {
 		this.setState({
 			userID: ''
 		});
+		signoutRequest().catch((err) => {
+			console.log(err);
+		});
 	};
 
   render() {
     return (
 		<BrowserRouter>
 			<Fragment>
-					<AuthContext.Provider value={{
-						userID: this.state.userID,
-						authenticate: this.authenticate,
-						signout: this.signout
-					}}>
-						<Switch>
-							<main className="main-content">
-								{this.state.isLoading && <LinearProgress /> }
-								{!this.state.isLoading && <Fragment>
-									{!this.state.userID && <Redirect to="/auth" exact />}
-									{!this.state.userID && <Route path="/auth" component={AuthPage} />}
-									{this.state.userID && <Redirect path="/" to="/home" exact />}
-									{this.state.userID && <Redirect path="/auth" to="/home" exact />}
-									{this.state.userID &&
-										<Fragment>
-											<Route path="/home" component={HomePage} />
-											<Route path="/lists" component={ListsPage} />
-											<Route path="/search" component={null} />
-											<Route path="/profile" component={null} />
-										</Fragment>
-									}
-								</Fragment>}
-							</main>
-						</Switch>
-						<MainNavigation />
-					</AuthContext.Provider>
+				<AuthContext.Provider value={{
+					userID: this.state.userID,
+					authenticate: this.authenticate,
+					signout: this.signout
+				}}>
+					<Switch>
+						<main className="main-content">
+							{this.state.isLoading && <LinearProgress /> }
+							{!this.state.isLoading && <Fragment>
+								{!this.state.userID && <Redirect to="/auth" exact />}
+								{!this.state.userID && <Route path="/auth" component={AuthPage} />}
+								{this.state.userID && <Redirect path="/" to="/home" exact />}
+								{this.state.userID && <Redirect path="/auth" to="/home" exact />}
+								{this.state.userID &&
+									<Fragment>
+										<Route path="/home" component={HomePage} />
+										<Route path="/lists" component={ListsPage} />
+										<Route path="/search" component={null} />
+										<Route path="/profile" component={null} />
+									</Fragment>
+								}
+							</Fragment>}
+						</main>
+					</Switch>
+					<MainNavigation />
+				</AuthContext.Provider>
 			</Fragment>
 		</BrowserRouter>
     );

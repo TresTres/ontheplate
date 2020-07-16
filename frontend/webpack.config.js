@@ -47,6 +47,10 @@ module.exports = {
 			'/api': {
 				target: 'https://localhost:4000',
 				secure: false
+			},
+			'/signout': {
+				target: 'https://localhost:4000',
+				secure: false
 			}
 		},
 		port: 3000

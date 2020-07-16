@@ -64,7 +64,7 @@ const login = async ({ str, password }, res) => {
 			`${process.env.JWT_SECRET}`,
 			{ expiresIn: '1h' }
 		);
-		res.cookie("id", token, {
+		res.cookie('id', token, {
 			httpOnly: true,
 			sameSite: true,
 			maxAge: 1000 * 60 * 60 // one hour
